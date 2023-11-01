@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('TenantsConfigs', {
+    await queryInterface.createTable('Shippings', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -10,20 +10,21 @@ module.exports = {
         unique: true,
         primaryKey: true,
       },
+      courier: {
+        type: Sequelize.STRING,
+      },
+      tracking: {
+        type: Sequelize.STRING,
+      },
       tenantId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
       },
-      configName: {
-        type: Sequelize.STRING,
-        primaryKey: true,
-      },
-      configValue: {
-        type: Sequelize.JSON,
+      userId: {
+        type: Sequelize.INTEGER,
       },
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('TenantsConfigs');
+    await queryInterface.dropTable('Shippings');
   },
 };

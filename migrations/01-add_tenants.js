@@ -10,7 +10,7 @@ module.exports = {
         unique: true,
         primaryKey: true,
       },
-      name: {
+      tenantName: {
         type: Sequelize.STRING,
         unique: true,
       },

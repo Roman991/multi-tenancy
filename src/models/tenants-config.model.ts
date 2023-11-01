@@ -1,4 +1,5 @@
 import {
+  AutoIncrement,
   BelongsTo,
   Column,
   DataType,
@@ -8,35 +9,34 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import { InferAttributes, InferCreationAttributes } from 'sequelize';
+import {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
 import { Tenant } from './tenant.model';
 
-@Table({ tableName: 'tenants_configs' })
+@Table({ timestamps: false })
 export class TenantsConfig extends Model<
   InferAttributes<TenantsConfig>,
   InferCreationAttributes<TenantsConfig>
 > {
+  @AutoIncrement
+  @PrimaryKey
+  @Column(DataType.INTEGER)
+  id: CreationOptional<number>;
+
   @ForeignKey(() => Tenant)
   @Column
-  tenant_id: number;
+  tenantId: number;
 
-  @BelongsTo(() => Tenant, 'tenant_id')
+  @BelongsTo(() => Tenant, 'tenantId')
   tenant: Tenant;
 
   @PrimaryKey
   @Column
-  section_name: string;
-
-  @PrimaryKey
-  @Column
-  config_name: string;
+  configName: string;
 
   @Column(DataType.JSON)
-  value: any;
-
-  @Column
-  createdAt: Date;
-
-  @Column
-  updatedAt: Date;
+  configValue: any;
 }

@@ -17,9 +17,7 @@ import {
   NonAttribute,
 } from 'sequelize';
 
-@Table({
-  tableName: 'users',
-})
+@Table
 export class User extends Model<
   InferAttributes<User>,
   InferCreationAttributes<User>
@@ -30,12 +28,12 @@ export class User extends Model<
   id: CreationOptional<number>;
 
   @Column
-  first_name: string;
+  firstName: string;
 
   @ForeignKey(() => Tenant)
   @Column
-  tenant_id: number;
+  tenantId: number;
 
-  @BelongsTo(() => Tenant, 'tenant_id')
+  @BelongsTo(() => Tenant, 'tenantId')
   tenant: NonAttribute<Tenant>;
 }

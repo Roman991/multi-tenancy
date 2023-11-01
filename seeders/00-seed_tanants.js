@@ -8,17 +8,17 @@ module.exports = {
         {
           id: 1,
           tenantId: 1,
-          name: 'Roman',
+          firstName: 'Roman',
         },
         {
           id: 2,
           tenantId: 1,
-          name: 'Joe',
+          firstName: 'Joe',
         },
         {
           id: 3,
           tenantId: 2,
-          name: 'Daniel',
+          firstName: 'Daniel',
         },
       ],
       {},

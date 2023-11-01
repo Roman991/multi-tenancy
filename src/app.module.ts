@@ -1,18 +1,15 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { load } from './load-config';
-import { User } from './models/user.model';
+import { ShippingsModule } from './shippings/shippings.module';
+import { Shipping } from './models/shippings.model';
 import { Tenant } from './models/tenant.model';
 import { TenantsConfig } from './models/tenants-config.model';
-import { ShippingsModule } from './shippings/shippings.module';
+import { User } from './models/user.model';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [async () => load()],
-    }),
+    ConfigModule.forRoot(),
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.PSQL_URL,
@@ -20,7 +17,8 @@ import { ShippingsModule } from './shippings/shippings.module';
       username: process.env.PSQL_USER,
       password: process.env.PSQL_PASSWORD,
       database: process.env.PSQL_DB,
-      models: [User, Tenant, TenantsConfig],
+      models: [Shipping, Tenant, TenantsConfig, User],
+      synchronize: false,
     }),
     ShippingsModule,
   ],

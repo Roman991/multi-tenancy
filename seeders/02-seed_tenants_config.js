@@ -8,14 +8,14 @@ module.exports = {
         {
           id: 1,
           tenantId: 1,
-          configName: 'royalShipping',
+          configName: 'courierFedex',
           configValue: '{"user":123,"pass":123}',
         },
         {
           id: 2,
           tenantId: 2,
-          configName: 'royalShipping',
-          configValue: '{"user":123,"pass":123}',
+          configName: 'courierFedex',
+          configValue: '{"user":234,"pass":234}',
         },
       ],
       {},

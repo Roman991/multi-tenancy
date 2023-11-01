@@ -7,11 +7,11 @@ module.exports = {
       [
         {
           id: 1,
-          name: 'Tenant 1',
+          tenantName: 'Tenant 1',
         },
         {
           id: 2,
-          name: 'Tenant 2',
+          tenantName: 'Tenant 2',
         },
       ],
       {},
