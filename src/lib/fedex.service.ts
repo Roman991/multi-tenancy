@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'crypto';
+import { TenantsConfigService } from './tenants-config.service';
 
 // This is a shared service for creating shippings with Fedex
 // each tenant should pass different credentials (stored in TenantsConfigs table)
@@ -7,12 +8,13 @@ import { randomUUID } from 'crypto';
 @Injectable()
 export class FedexService {
   private _tenantId: number;
-  private _user: string;
-  private _password: string;
-  constructor(user: string, password: string, tenantId: number) {
-    this._user = user;
-    this._password = password;
+  constructor(
+    tenantId: number,
+    private tenantsConfigService: TenantsConfigService,
+  ) {
     this._tenantId = tenantId;
+
+    tenantsConfigService.getConfig(Number(tenantId), 'courierFedex');
   }
 
   async createShipping(): Promise<{ tracking: string }> {

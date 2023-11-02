@@ -11,6 +11,7 @@ export class ShippingsService {
     private tenantsConfigModel: typeof TenantsConfig,
     @InjectModel(Shipping)
     private shippingModel: typeof Shipping,
+    private fedexService: FedexService,
   ) {}
 
   async createShipping(params: {
@@ -33,11 +34,11 @@ export class ShippingsService {
     if (!config) {
       throw new Error('config not found for tenant ' + params.tenantId);
     }
-    const { user, pass } = config.configValue;
+    // const { user, pass } = config.configValue;
 
-    const fedexService = new FedexService(user, pass, params.tenantId);
+    // const fedexService = new FedexService(user, pass, params.tenantId);
 
-    const createShippingRes = await fedexService.createShipping();
+    const createShippingRes = await this.fedexService.createShipping();
     return await this.shippingModel.create({
       courier: 'fedex',
       tracking: createShippingRes.tracking,
