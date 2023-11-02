@@ -36,7 +36,7 @@ Inside the `shippings.service.ts` there is a rough implementation of what i'm tr
 
 Im looking for a BE structure that can handle multiple tenants (10-20 tenants)
 
-1. the BE should be aware of TenantConfig changes, to use always latest config data (without app reload)
+1. the BE should be aware of TenantConfig changes, to always use the latest config data (without app reload)
 2. ideally providers whould be instantiated once for tenant( and then cached somehow, until config changed)
 3. there should be some centralized middleware/interceptor to manage/return tenants configs
 4. there should be some centalized middleware/interceptor to check if user belongs to the declared tenant
