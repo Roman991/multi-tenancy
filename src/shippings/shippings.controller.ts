@@ -7,9 +7,9 @@ import {
 } from '@nestjs/common';
 import { ApiHeader, ApiTags } from '@nestjs/swagger';
 import { ShippingsService } from './shippings.service';
-import { TenantConfigInterceptor } from 'src/middleware/tenancy.guard';
-import { GetTenantConfig } from 'src/decorators';
-import { TenantsConfig } from 'src/models/tenants-config.model';
+import { TenantInterceptor } from 'src/middleware/tenant.interceptor';
+import { Tenant } from 'src/decorators/tenant.decorator';
+import { TenantConfig } from 'src/middleware/tenant-config.dto';
 
 // Here we have just one entry point for all tenants
 @ApiTags('shippings')
@@ -34,16 +34,17 @@ export class ShippingsController {
     required: true,
     description: 'The user ID',
   })
-  @UseInterceptors(TenantConfigInterceptor)
+  @UseInterceptors(TenantInterceptor)
   @Post()
   async createShipping(
     @Headers() headers,
-    @GetTenantConfig() config: TenantsConfig,
+    @Tenant()
+    tenant: TenantConfig,
   ) {
-    const tenantId = headers['x-tenant-id'];
+    console.log('tenant', tenant);
     const userId = headers['x-user-id'];
     return await this.shippingService.createShipping({
-      tenantId,
+      tenantId: tenant.tenantId,
       courier: 'fedex',
       userId,
     });

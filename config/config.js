@@ -5,5 +5,5 @@ module.exports = {
     database: 'multi-tenancy',
     host: 'dev.quellideilibri.it',
     dialect: 'postgres',
-     },
+  },
 };
