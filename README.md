@@ -1,3 +1,7 @@
+## About This Repository
+This is a boilerplate for a BE with multitenancy on row level.
+Using nestjs as main framework and sequelize as orm
+
 ## Folders structure
 
 - `config`, `migrations` and `seeders` are used by sequelize-cli to setup the DB
