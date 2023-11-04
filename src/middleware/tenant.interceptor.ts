@@ -34,11 +34,11 @@ export class TenantInterceptor implements NestInterceptor {
     }
     const tenantId = Number(request.headers[HEADER_NAME]);
 
-    let configs: TenantConfig;
+    let configs: TenantsConfig[];
 
     const hasConfig = this.tenantConfigService.hasConfig(tenantId);
     if (hasConfig) {
-      configs = this.tenantConfigService.get(tenantId);
+      configs = this.tenantConfigService.get(tenantId).tenantConfigs;
     } else {
       const dbConfigs = await this.tenantsConfigModel.findAll({
         where: {
@@ -48,7 +48,10 @@ export class TenantInterceptor implements NestInterceptor {
       if (dbConfigs.length < 1) {
         throw new NotFoundException('Tenant id not found');
       }
-      configs = this.tenantConfigService.store(tenantId, dbConfigs);
+      configs = this.tenantConfigService.store(
+        tenantId,
+        dbConfigs,
+      ).tenantConfigs;
     }
 
     if (!configs) {

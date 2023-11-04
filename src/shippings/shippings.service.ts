@@ -1,47 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { FedexService } from 'src/lib/fedex.service';
+import { TenantConfig } from 'src/middleware/tenant-config.dto';
 import { Shipping } from 'src/models/shippings.model';
-import { TenantsConfig } from 'src/models/tenants-config.model';
 
 @Injectable()
 export class ShippingsService {
   constructor(
-    @InjectModel(TenantsConfig)
-    private tenantsConfigModel: typeof TenantsConfig,
     @InjectModel(Shipping)
     private shippingModel: typeof Shipping,
   ) {}
 
-  async createShipping(params: {
-    tenantId: number;
-    courier: 'fedex';
-    userId: number;
-  }) {
-    // TODO here I should load the `tenantId` config and create a new instance of the provider FedexService
-    // TODO or load the already initiated one for that tenant (idk).
-
-    // ! this is a wrong (imo) way to do it, just to understand the logical flow of what i'm trying to achieve
-
-    // The whole `TenantsConfig` can be changes in shape if you think its better
-    const config = await this.tenantsConfigModel.findOne({
-      where: {
-        tenantId: params.tenantId,
-        configName: 'courierFedex',
-      },
-    });
-    if (!config) {
-      throw new Error('config not found for tenant ' + params.tenantId);
-    }
-    const { user, pass } = config.configValue;
-
-    const fedexService = new FedexService(user, pass, params.tenantId);
+  async createShipping(
+    tenant: TenantConfig,
+    params: {
+      courier: 'fedex';
+      userId: number;
+    },
+  ) {
+    // todo this should be refactored, at least passing only fedex related configuration, not the whole tenant object
+    // initialize new provider passing the whole tenant config object
+    const fedexService = new FedexService(tenant);
 
     const createShippingRes = await fedexService.createShipping();
     return await this.shippingModel.create({
       courier: 'fedex',
       tracking: createShippingRes.tracking,
-      tenantId: params.tenantId,
+      tenantId: tenant.tenantId,
       userId: params.userId,
     });
   }
