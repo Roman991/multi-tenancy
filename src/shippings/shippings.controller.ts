@@ -41,10 +41,8 @@ export class ShippingsController {
     @Tenant()
     tenant: TenantConfig,
   ) {
-    console.log('tenant', tenant);
     const userId = headers['x-user-id'];
-    return await this.shippingService.createShipping({
-      tenantId: tenant.tenantId,
+    return await this.shippingService.createShipping(tenant, {
       courier: 'fedex',
       userId,
     });

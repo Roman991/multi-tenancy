@@ -30,10 +30,10 @@ export class TenantInterceptor implements NestInterceptor {
     }
     const tenantId = Number(request.headers[HEADER_NAME]);
 
-    let configs: TenantConfig;
+    let configs: TenantsConfig[];
 
     if (this.tenantsConfigs.has(tenantId)) {
-      configs = this.tenantsConfigs.get(tenantId);
+      configs = this.tenantsConfigs.get(tenantId).tenantConfigs;
     } else {
       const dbConfigs = await this.tenantsConfigModel.findAll({
         where: {
@@ -44,6 +44,8 @@ export class TenantInterceptor implements NestInterceptor {
         tenantId: tenantId,
         tenantConfigs: dbConfigs.map((el) => el.toJSON()),
       });
+      // set as current tenant
+      configs = this.tenantsConfigs.get(tenantId).tenantConfigs;
     }
 
     if (!configs) {
