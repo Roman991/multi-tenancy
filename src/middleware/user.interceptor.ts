@@ -4,7 +4,6 @@ import {
   ExecutionContext,
   CallHandler,
   BadRequestException,
-  NotFoundException,
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';

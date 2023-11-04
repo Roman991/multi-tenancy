@@ -24,7 +24,6 @@ export class TenantInterceptor implements NestInterceptor {
   constructor(
     @InjectModel(TenantsConfig)
     private tenantsConfigModel: typeof TenantsConfig,
-    // private userService: UserService,
     private tenantConfigService: TenantConfigService,
   ) {}
   async intercept(context: ExecutionContext, next: CallHandler): Promise<any> {
