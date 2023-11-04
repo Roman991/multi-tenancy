@@ -5,7 +5,6 @@ import {
   CallHandler,
   BadRequestException,
   NotFoundException,
-  InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { TenantsConfig } from 'src/models/tenants-config.model';
@@ -47,10 +46,7 @@ export class TenantInterceptor implements NestInterceptor {
       if (dbConfigs.length < 1) {
         throw new NotFoundException('Tenant id not found');
       }
-      configs = this.tenantConfigService.store(
-        tenantId,
-        dbConfigs,
-      ).tenantConfigs;
+      configs = this.tenantConfigService.set(tenantId, dbConfigs).tenantConfigs;
     }
 
     if (!configs) {

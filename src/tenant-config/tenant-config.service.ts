@@ -6,15 +6,18 @@ import { TenantsConfig } from 'src/models/tenants-config.model';
 export class TenantConfigService {
   tenantsConfigs = new Map<number, TenantConfig>();
   private logger = new Logger(TenantConfigService.name);
-  constructor() {}
 
-  store(tenantId: number, config: TenantsConfig[]): TenantConfig {
+  /**
+   * use this method to set or update the tenantId config
+   * @param config should be the complete array of all configs for tenant
+   */
+
+  set(tenantId: number, config: TenantsConfig[]): TenantConfig {
     const configs: TenantConfig = {
       tenantId: tenantId,
       tenantConfigs: config.map((el) => el.toJSON()),
     };
     this.tenantsConfigs.set(tenantId, configs);
-    // console.log(this.tenantsConfigs);
     return configs;
   }
 
