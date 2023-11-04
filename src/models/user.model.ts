@@ -2,11 +2,13 @@ import {
   AutoIncrement,
   BelongsTo,
   Column,
+  CreatedAt,
   DataType,
   ForeignKey,
   Model,
   PrimaryKey,
   Table,
+  UpdatedAt,
 } from 'sequelize-typescript';
 
 import { Tenant } from './tenant.model';
@@ -17,7 +19,7 @@ import {
   NonAttribute,
 } from 'sequelize';
 
-@Table
+@Table({ timestamps: true })
 export class User extends Model<
   InferAttributes<User>,
   InferCreationAttributes<User>
@@ -36,4 +38,10 @@ export class User extends Model<
 
   @BelongsTo(() => Tenant, 'tenantId')
   tenant: NonAttribute<Tenant>;
+
+  @CreatedAt
+  createdAt: Date;
+
+  @UpdatedAt
+  updatedAt: Date;
 }

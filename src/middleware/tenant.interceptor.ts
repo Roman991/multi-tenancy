@@ -5,10 +5,12 @@ import {
   CallHandler,
   BadRequestException,
   NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { TenantsConfig } from 'src/models/tenants-config.model';
 import { TenantConfig } from './tenant-config.dto';
+import { TenantConfigService } from 'src/tenant-config/tenant-config.service';
 
 const HEADER_NAME = 'x-tenant-id'; // Replace with the header name you want to check
 
@@ -22,6 +24,8 @@ export class TenantInterceptor implements NestInterceptor {
   constructor(
     @InjectModel(TenantsConfig)
     private tenantsConfigModel: typeof TenantsConfig,
+    // private userService: UserService,
+    private tenantConfigService: TenantConfigService,
   ) {}
   async intercept(context: ExecutionContext, next: CallHandler): Promise<any> {
     const request = context.switchToHttp().getRequest();
@@ -32,18 +36,19 @@ export class TenantInterceptor implements NestInterceptor {
 
     let configs: TenantConfig;
 
-    if (this.tenantsConfigs.has(tenantId)) {
-      configs = this.tenantsConfigs.get(tenantId);
+    const hasConfig = this.tenantConfigService.hasConfig(tenantId);
+    if (hasConfig) {
+      configs = this.tenantConfigService.get(tenantId);
     } else {
       const dbConfigs = await this.tenantsConfigModel.findAll({
         where: {
           tenantId: tenantId,
         },
       });
-      this.tenantsConfigs.set(tenantId, {
-        tenantId: tenantId,
-        tenantConfigs: dbConfigs.map((el) => el.toJSON()),
-      });
+      if (dbConfigs.length < 1) {
+        throw new NotFoundException('Tenant id not found');
+      }
+      configs = this.tenantConfigService.store(tenantId, dbConfigs);
     }
 
     if (!configs) {

@@ -10,6 +10,7 @@ import { ShippingsService } from './shippings.service';
 import { TenantInterceptor } from 'src/middleware/tenant.interceptor';
 import { Tenant } from 'src/decorators/tenant.decorator';
 import { TenantConfig } from 'src/middleware/tenant-config.dto';
+import { UserInterceptor } from 'src/middleware/user.interceptor';
 
 // Here we have just one entry point for all tenants
 @ApiTags('shippings')
@@ -34,14 +35,14 @@ export class ShippingsController {
     required: true,
     description: 'The user ID',
   })
-  @UseInterceptors(TenantInterceptor)
+  @UseInterceptors(UserInterceptor, TenantInterceptor)
   @Post()
   async createShipping(
     @Headers() headers,
     @Tenant()
     tenant: TenantConfig,
   ) {
-    console.log('tenant', tenant);
+    // console.log('tenant', tenant);
     const userId = headers['x-user-id'];
     return await this.shippingService.createShipping({
       tenantId: tenant.tenantId,

@@ -6,6 +6,7 @@ import { Tenant } from './models/tenant.model';
 import { TenantsConfig } from './models/tenants-config.model';
 import { User } from './models/user.model';
 import { ConfigModule } from '@nestjs/config';
+import { TenantConfigModule } from './tenant-config/tenant-config.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ConfigModule } from '@nestjs/config';
       synchronize: false,
     }),
     ShippingsModule,
+    TenantConfigModule,
   ],
 })
 export class AppModule {}
